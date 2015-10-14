@@ -10,15 +10,32 @@ class Search
 	end
 
 	#set the author, title, etc
-	def setMeta author, title
-		@author = author
-		@title = title
+	def setMeta metadata
+		#split by "||"
+		metadata = metadata.split("||")
+		@author = metadata[0]
+		@title = metadata[1]
+		@year = metadata[2]
 	end
 
-	def search file
-	 	open(file,'r') do |f|
-        		#split the text by sentence
-        		f.read.scan(/\s+[^.!?]*[.!?]/) do |sentence|
+	def search folder
+		Dir.glob("#{folder}/*") do |file|
+	 	open(file,'r') do |open|
+			#make sure text is valid UTF
+			validOpen = open.read.encode('UTF-8','binary',invalid: :replace, undef: :replace, replace: '')
+
+			#per format, the corpus text will contain the title and author in the first line
+			setMeta validOpen.lines.first
+
+			#put the book in our database
+			@manager.addBook @author, @title, @year
+
+			#tell the user what we're searching
+			printf "Searching - %-40s %s\n", @author, @title
+
+
+			#split the text by sentence and make sure it's valid UTF-8
+			validOpen.scan(/\s+[^.!?]*[.!?]/) do |sentence|
                 		#split by line now since poetry is different
       		          	sentence = sentence.split("\n")
                 		sentence.each do |line|
@@ -28,6 +45,7 @@ class Search
                         		end
                 		end
         		end
+		end
 		end
 	end
 
@@ -40,6 +58,10 @@ class Search
 	end
 
 	def addToDatabase line
-		@manager.addLine line
+		@manager.addLine line, @title
 	end
+	def stats
+		@manager.stats
+	end	
+
 end
