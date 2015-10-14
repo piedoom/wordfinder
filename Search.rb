@@ -28,7 +28,8 @@ class Search
 			setMeta validOpen.lines.first
 
 			#put the book in our database
-			@manager.addBook @author, @title, @year
+			#We get the current book ID out of this too
+			@bookID = @manager.addBook @author, @title, @year
 
 			#tell the user what we're searching
 			printf "Searching - %-40s %s\n", @author, @title
@@ -58,7 +59,7 @@ class Search
 	end
 
 	def addToDatabase line
-		@manager.addLine line, @title
+		@manager.addLine line, @title, @bookID
 	end
 	def stats
 		@manager.stats
