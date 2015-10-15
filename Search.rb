@@ -18,7 +18,11 @@ class Search
 		@year = metadata[2]
 	end
 
-	def search folder
+	def clearDatabase
+		@manager.clearDatabase
+	end
+
+	def index folder
 		Dir.glob("#{folder}/*") do |file|
 	 	open(file,'r') do |open|
 			#make sure text is valid UTF
@@ -59,7 +63,8 @@ class Search
 	end
 
 	def addToDatabase line
-		@manager.addLine line, @title, @bookID
+		@manager.addLine line, @title, @bookID.id
+		#will use transactions in the future
 	end
 	def stats
 		@manager.stats
