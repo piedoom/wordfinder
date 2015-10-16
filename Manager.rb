@@ -11,8 +11,8 @@ class Manager
         def initialize
 	end
 
-	def addBook author, title, year
-		Book.create(author: author, title: title, year: year)
+	def addBook author, title, year, wordcount
+		Book.create(author: author, title: title, year: year, wordcount: wordcount)
 		#return the book ID so we can later use it when adding a quote
 		return Book.where(title: title).first
 	end

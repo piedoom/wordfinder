@@ -31,13 +31,12 @@ class Search
 			#per format, the corpus text will contain the title and author in the first line
 			setMeta validOpen.lines.first
 
-			#put the book in our database
-			#We get the current book ID out of this too
-			@bookID = @manager.addBook @author, @title, @year
-
 			#tell the user what we're searching
 			printf "Searching - %-40s %s\n", @author, @title
-
+ 	
+			#put the book in our database
+			#We get the current book ID out of this too
+			@bookID = @manager.addBook @author, @title, @year, validOpen.split.count
 
 			#split the text by sentence and make sure it's valid UTF-8
 			validOpen.scan(/\s+[^.!?]*[.!?]/) do |sentence|
@@ -49,9 +48,10 @@ class Search
 						compare word, line
                         		end
                 		end
-        		end
+			end
 		end
-		end
+
+	end
 	end
 
 	def compare word, line
