@@ -1,6 +1,12 @@
-requirements: 
-
-Debian:
+#requirements: 
 
 libmagickwand-dev
 imagemagick
+sqlite3
+ruby
+bundler
+
+#instructions
+
+
+
